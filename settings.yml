@@ -1,0 +1,5 @@
+allowed_groups:
+  type: list
+  list_type: group
+  default: "0"
+  description: "Choose the groups allowed to have a custom user status."

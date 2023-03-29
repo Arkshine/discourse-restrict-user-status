@@ -1,0 +1,3 @@
+en:
+  theme_metadata:
+    description: "A theme component to restrict user status access to groups."
