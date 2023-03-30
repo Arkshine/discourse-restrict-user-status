@@ -122,6 +122,8 @@ export default apiInitializer("0.11.1", (api) => {
     get showStatus() {
       const messageUser = this.args.message.user;
 
+      // FIX ME: messageUser doesn't contain groups data. 
+
       if (currentUser.id === messageUser.id) {
         return userAllowed(messageUser);
       }
@@ -130,7 +132,39 @@ export default apiInitializer("0.11.1", (api) => {
     },
   });
 
-  // TODO: Status as emoji in preference page in the avatar
-  // TODO: Status in posts list
+  /**
+   * Hides the status emoji near the username in preferences page,
+   * by wrapping the "user-status-message" template with <div class="hidden"></div>.
+   */
+  api.modifyClass("component:user-status-message", {
+    pluginId: PLUGIN_ID,
 
+    didReceiveAttrs() {
+      this._super(...arguments);
+
+      // Specific to preference page.
+      if (
+        !api.container
+          .lookup("service:router")
+          ?.currentRouteName.startsWith("preferences")
+      ) {
+        return;
+      }
+
+      // Prevents changes in chat if drawer is not in fullscreen
+      // as template is used there and being covered in another way.
+      if (
+        !this.parentView ||
+        this.parentView.attrs?.channel ||
+        this.parentView.attrs?.class !== "user-main"
+      ) {
+        return;
+      }
+
+      if (!userAllowed(this.currentUser)) {
+        this.tagName = "div";
+        this.classNames = ["hidden", ...this.classNames];
+      }
+    },
+  });
 });
