@@ -97,6 +97,23 @@ export default apiInitializer("0.11.1", (api) => {
   });
 
   /**
+   * Removes the status in the posts list.
+   */
+  api.reopenWidget("poster-name", {
+    addUserStatus(contents, attrs) {
+      if (
+        attrs.user &&
+        attrs.user.id === currentUser.id &&
+        !userAllowed(this.currentUser)
+      ) {
+        return;
+      }
+
+      return this._super(contents, attrs);
+    },
+  });
+
+  /**
    * Hides in chat messages.
    */
   api.modifyClass("component:chat-message-info", {
