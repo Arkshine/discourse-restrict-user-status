@@ -15,26 +15,29 @@ export default apiInitializer("0.11.1", (api) => {
 
   const groupsIds = settings.allowed_groups.split("|").map((id) => Number(id));
 
-  // If everyone group, don't go further.
-  if (groupsIds.includes(0)) {
+  if (groupsIds.includes(0 /*everyone*/)) {
     return;
   }
 
-  const userAllowed = (groups) =>
-    groups
-      .map((group) => Number(group.id))
+  const userAllowed = ({ groups }) => {
+    return groups
+      ?.map((group) => Number(group.id))
       .some((id) => groupsIds.includes(id));
+  };
 
+  /**
+   * Removes the status changer in the preferences page.
+   */
   api.modifyClass("controller:preferences/account", {
     pluginId: PLUGIN_ID,
 
     @discourseComputed()
     canSelectUserStatus() {
-      return userAllowed(this.currentUser.groups);
+      return userAllowed(this.currentUser);
     },
   });
 
- /**
+  /**
    * Removes the status in the user card.
    */
   api.modifyClass("component:user-card-contents", {
