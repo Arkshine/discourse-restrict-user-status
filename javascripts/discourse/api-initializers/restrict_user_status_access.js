@@ -78,4 +78,16 @@ export default apiInitializer("0.11.1", (api) => {
     });
   }
 
+  /**
+   * Hides the status emoji inside the avatar.
+   */
+  api.reopenWidget("user-status-bubble", {
+    buildClasses(attrs) {
+      if (!userAllowed(this.currentUser)) {
+        return "hidden";
+      }
+    },
+  });
+
+
 });
