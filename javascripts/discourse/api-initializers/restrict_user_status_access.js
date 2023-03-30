@@ -96,5 +96,24 @@ export default apiInitializer("0.11.1", (api) => {
     },
   });
 
+  /**
+   * Hides in chat messages.
+   */
+  api.modifyClass("component:chat-message-info", {
+    pluginId: PLUGIN_ID,
+
+    get showStatus() {
+      const messageUser = this.args.message.user;
+
+      if (currentUser.id === messageUser.id) {
+        return userAllowed(messageUser);
+      }
+
+      return messageUser.get("status");
+    },
+  });
+
+  // TODO: Status as emoji in preference page in the avatar
+  // TODO: Status in posts list
 
 });
