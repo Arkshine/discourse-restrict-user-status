@@ -34,16 +34,20 @@ export default apiInitializer("0.11.1", (api) => {
     },
   });
 
+ /**
+   * Removes the status in the user card.
+   */
   api.modifyClass("component:user-card-contents", {
     pluginId: PLUGIN_ID,
 
     @discourseComputed("user.status")
     hasStatus() {
-      return (
-        this.siteSettings.enable_user_status &&
-        this.user.status &&
-        userAllowed(this.currentUser.groups)
-      );
+      const hasStatus =
+        this.siteSettings.enable_user_status && this.user.status;
+
+      return this.user.id !== this.currentUser.id
+        ? hasStatus
+        : userAllowed(this.currentUser);
     },
   });
 
