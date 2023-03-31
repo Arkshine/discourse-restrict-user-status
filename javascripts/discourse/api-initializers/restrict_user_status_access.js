@@ -116,21 +116,23 @@ export default apiInitializer("0.11.1", (api) => {
   /**
    * Hides in chat messages.
    */
-  api.modifyClass("component:chat-message-info", {
-    pluginId: PLUGIN_ID,
+  if (siteSettings.chat_enabled) {
+    api.modifyClass("component:chat-message-info", {
+      pluginId: PLUGIN_ID,
 
-    get showStatus() {
-      const messageUser = this.args.message.user;
+      get showStatus() {
+        const messageUser = this.args.message.user;
 
-      // FIX ME: messageUser doesn't contain groups data. 
+        // FIX ME: messageUser doesn't contain groups data. 
 
-      if (currentUser.id === messageUser.id) {
-        return userAllowed(messageUser);
-      }
+        if (currentUser.id === messageUser.id) {
+          return userAllowed(messageUser);
+        }
 
-      return messageUser.get("status");
-    },
-  });
+        return messageUser.get("status");
+      },
+    });
+  }
 
   /**
    * Hides the status emoji near the username in preferences page,
