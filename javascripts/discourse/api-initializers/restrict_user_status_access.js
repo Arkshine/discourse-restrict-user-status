@@ -161,15 +161,6 @@ export default apiInitializer("0.11.1", (api) => {
     didReceiveAttrs() {
       this._super(...arguments);
 
-      // Specific to preference page.
-      if (
-        !api.container
-          .lookup("service:router")
-          ?.currentRouteName.startsWith("preferences")
-      ) {
-        return;
-      }
-
       if (siteSettings.chat_enabled) {
         // Prevents changes in chat if drawer is not in fullscreen
         // as template is used there and being covered in another way.
