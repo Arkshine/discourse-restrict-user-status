@@ -153,14 +153,16 @@ export default apiInitializer("0.11.1", (api) => {
         return;
       }
 
-      // Prevents changes in chat if drawer is not in fullscreen
-      // as template is used there and being covered in another way.
-      if (
-        !this.parentView ||
-        this.parentView.attrs?.channel ||
-        this.parentView.attrs?.class !== "user-main"
-      ) {
-        return;
+      if (siteSettings.chat_enabled) {
+        // Prevents changes in chat if drawer is not in fullscreen
+        // as template is used there and being covered in another way.
+        if (
+          !this.parentView ||
+          this.parentView.attrs?.channel ||
+          this.parentView.attrs?.class !== "user-main"
+        ) {
+          return;
+        }
       }
 
       if (!userAllowed(this.currentUser)) {
