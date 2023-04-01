@@ -83,10 +83,27 @@ export default apiInitializer("0.11.1", (api) => {
         return isActive;
       },
     });
+  } else {
+    /**
+     * Old menu
+     */
+    api.reopenWidget("user-status-item", {
+      buildClasses(attrs) {
+        if (!userAllowed(this.currentUser)) {
+          return "hidden";
+        }
+      },
+
+      html(attrs) {
+        if (userAllowed(this.currentUser)) {
+          return this._super(attrs);
+        }
+      }
+   });
   }
 
   /**
-   * Hides the status emoji inside the avatar.
+   * Hides the status emoji inside the avatar (header)
    */
   api.reopenWidget("user-status-bubble", {
     buildClasses(attrs) {
